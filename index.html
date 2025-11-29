@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sarvesh Jagtap | Computer Engineering & AI Developer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tailwind Config for Custom Colors/Fonts -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        dark: '#050505',
+                        card: '#0A0A0A',
+                        accent: '#6366f1', /* Indigo 500 */
+                        'accent-glow': '#818cf8',
+                    },
+                    animation: {
+                        'infinite-scroll': 'infinite-scroll 25s linear infinite',
+                    },
+                    keyframes: {
+                        'infinite-scroll': {
+                            from: { transform: 'translateX(0)' },
+                            to: { transform: 'translateX(-100%)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #050505;
+            color: #e2e8f0;
+        }
+
+        /* Disable default cursor on desktop, including links/buttons/cards */
+        @media (hover: hover) and (pointer: fine) {
+            body,
+            a,
+            button,
+            .spotlight-card {
+                cursor: none !important;
+            }
+        }
+        /* Glow effect for availability badge */
+        .glow-badge {
+            box-shadow: 
+                0 0 12px rgba(99,102,241,0.35),
+                0 0 24px rgba(99,102,241,0.2);
+            backdrop-filter: blur(4px);
+            animation: glowPulse 2.5s ease-in-out infinite alternate;
+        }
+
+        @keyframes glowPulse {
+            from {
+                box-shadow:
+                    0 0 8px rgba(99,102,241,0.3),
+                    0 0 16px rgba(99,102,241,0.15);
+            }
+            to {
+                box-shadow:
+                    0 0 16px rgba(99,102,241,0.5),
+                    0 0 30px rgba(99,102,241,0.35);
+            }
+        }
+
+        /* Custom Cursor (dot by default, hollow ring on hover) */
+        #custom-cursor {
+            width: 10px;
+            height: 10px;
+            background: rgba(129,140,248,1);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(0, 0);
+            transition:
+                transform 0.12s ease,
+                width 0.2s ease,
+                height 0.2s ease,
+                background 0.2s ease,
+                border 0.2s ease,
+                box-shadow 0.2s ease;
+            border: none;
+            box-shadow: 0 0 10px rgba(129,140,248,0.6);
+            mix-blend-mode: lighten;
+        }
+
+        /* Subtle Grid Background */
+        .bg-grid {
+            background-size: 50px 50px;
+            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+            -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+        }
+
+        /* Card Spotlight Effect */
+        .spotlight-card {
+            position: relative;
+            background: #0A0A0A;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+        
+        .spotlight-card::before {
+            content: "";
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            top: 0;
+            left: 0;
+            background: radial-gradient(
+                800px circle at var(--mouse-x) var(--mouse-y),
+                rgba(255, 255, 255, 0.06),
+                transparent 40%
+            );
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 0.5s;
+            pointer-events: none;
+        }
+
+        .spotlight-card:hover::before {
+            opacity: 1;
+        }
+        
+        .spotlight-card:hover {
+            border-color: rgba(99, 102, 241, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Text Gradient */
+        .text-gradient {
+            background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .text-gradient-accent {
+            background: linear-gradient(135deg, #818cf8 0%, #c084fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #050505;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+
+        .section-fade-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .section-fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ===== HACKER EASTER EGG STYLES ===== */
+
+        /* Hacker Easter Egg - Matrix background */
+        .hacker-matrix-bg {
+            background-image: linear-gradient(
+                rgba(16,185,129,0.1) 1px,
+                transparent 1px
+            ),
+            linear-gradient(
+                90deg,
+                rgba(16,185,129,0.05) 1px,
+                transparent 1px
+            );
+            background-size: 20px 20px;
+            animation: hackerGridScroll 8s linear infinite;
+        }
+
+        @keyframes hackerGridScroll {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(20px); }
+        }
+
+        /* Show flex overlay */
+        .hacker-show {
+            display: flex !important;
+        }
+
+        /* Blinking cursor in prompt */
+        #hackerPrompt {
+            display: inline-block;
+            width: 8px;
+            animation: blinkCursor 0.9s steps(1) infinite;
+        }
+
+        @keyframes blinkCursor {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        /* === Floating hacker logo animations === */
+
+        /* Pulse only affects glow, not position */
+        @keyframes hackerPulse {
+            0% {
+                box-shadow: 0 0 14px rgba(16,185,129,0.7);
+            }
+            50% {
+                box-shadow: 0 0 26px rgba(16,185,129,1);
+            }
+            100% {
+                box-shadow: 0 0 14px rgba(16,185,129,0.7);
+            }
+        }
+
+        /* Wiggle on hover (applied to button wrapper so it doesn't fight scale on icon) */
+        @keyframes hackerWiggle {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            25% {
+                transform: translateY(-2px) rotate(-3deg);
+            }
+            75% {
+                transform: translateY(2px) rotate(3deg);
+            }
+        }
+
+        /* Base pulse on the icon circle */
+        #secretLogoIcon {
+            animation: hackerPulse 3s ease-in-out infinite;
+        }
+
+        /* Wiggle on hover for the whole floating button */
+        #secretLogo:hover {
+            animation: hackerWiggle 0.35s ease-in-out;
+            transform-origin: center;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-indigo-500 selection:text-white overflow-x-hidden">
+
+    <!-- Background Grid Fix -->
+    <div class="fixed inset-0 pointer-events-none z-0 bg-grid"></div>
+
+    <!-- Custom Cursor -->
+    <div id="custom-cursor"></div>
+
+    <!-- Navigation (Top Bar) -->
+    <nav class="fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-black/60 backdrop-blur-xl">
+      <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+        
+        <!-- Left: Logo / Name -->
+        <a href="#home" class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center text-xs font-bold tracking-tight">
+            SJ
+          </div>
+          <span class="text-sm font-semibold text-slate-200 hidden sm:inline">
+            Sarvesh Jagtap
+          </span>
+        </a>
+
+        <!-- Right: Nav Links -->
+        <div class="flex items-center gap-5 sm:gap-8 text-sm font-medium">
+          <a href="#home" class="nav-link flex items-center gap-1 text-slate-200">
+            <i class="fas fa-home text-xs"></i>
+            <span>Home</span>
+          </a>
+
+          <a href="#services" class="nav-link flex items-center gap-1 text-slate-300">
+            <i class="fas fa-layer-group text-xs"></i>
+            <span>About</span>
+          </a>
+
+          <a href="#education" class="nav-link flex items-center gap-1 text-slate-300">
+            <i class="fas fa-file-alt text-xs"></i>
+            <span>Resume</span>
+          </a>
+
+          <a href="#education" class="nav-link flex items-center gap-1 text-slate-300 hidden md:flex">
+            <i class="fas fa-certificate text-xs"></i>
+            <span>Certifications</span>
+          </a>
+
+          <a href="#projects" class="nav-link flex items-center gap-1 text-slate-300 hidden sm:flex">
+            <i class="fas fa-code text-xs"></i>
+            <span>Projects</span>
+          </a>
+
+          <a href="#contact" class="nav-link flex items-center gap-1 text-slate-300">
+            <i class="fas fa-envelope text-xs"></i>
+            <span>Contact</span>
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- FLOATING HACKER LOGO -->
+    <button
+      id="secretLogo"
+      class="fixed z-[60] flex flex-col items-center gap-1 group"
+      aria-label="Activate hacker mode"
+      type="button"
+      style="bottom: 64px; right: 40px;"
+    >
+      <div
+        id="secretLogoIcon"
+        class="w-11 h-11 rounded-full bg-emerald-500/90 flex items-center justify-center shadow-[0_0_20px_rgba(16,185,129,0.8)] border border-emerald-300/60 group-hover:scale-110 group-hover:bg-emerald-400/90 transition-transform duration-200"
+      >
+        <i class="fas fa-terminal text-black text-lg"></i>
+      </div>
+      <span class="text-[10px] uppercase tracking-[0.18em] text-emerald-300 group-hover:text-emerald-100">
+        click me
+      </span>
+
+      <!-- Tooltip: Hacker Mode -->
+      <div
+        class="mt-1 px-2 py-1 rounded bg-black/90 text-[10px] text-emerald-200 border border-emerald-400/40 shadow-[0_0_18px_rgba(16,185,129,0.6)] opacity-0 pointer-events-none group-hover:opacity-100 group-hover:-translate-y-1 transition-all duration-200"
+      >
+        Hacker Mode
+      </div>
+    </button>
+
+    <!-- Main Content -->
+    <main class="relative z-10 max-w-6xl mx-auto px-6 pt-20 pb-32">
+
+        <!-- Hero Section -->
+        <section id="home" class="min-h-[90vh] flex flex-col justify-center items-start section-fade-up">
+            
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-300 text-xs font-semibold tracking-wide uppercase mb-6 glow-badge">
+                <span class="w-2.5 h-2.5 rounded-full bg-indigo-400 animate-pulse shadow-[0_0_10px_rgba(129,140,248,0.8)]"></span>
+                Available for work
+            </div>
+
+            <h1 class="font-heading text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight mb-6 leading-[1.1]">
+                <span class="text-gradient">Sarvesh Jagtap</span><br>
+                <span class="text-gradient-accent">Computer Engineering. AI/ML Developer.</span>
+            </h1>
+
+            <p class="text-lg md:text-xl text-slate-400 max-w-2xl leading-relaxed mb-10">
+                A motivated developer with strong expertise in <strong>Backend Development, Artificial Intelligence, and Machine Learning</strong>. I design scalable full-stack applications and intelligent systems using Python, Cloud Platforms, and LLMs.
+            </p>
+
+            <div class="flex flex-wrap gap-4">
+                <a href="#projects" class="group relative px-8 py-4 bg-white text-black font-bold rounded-lg overflow-hidden transition-all hover:scale-105">
+                    <span class="relative z-10 flex items-center gap-2">
+                        View Projects <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                    </span>
+                    <div class="absolute inset-0 bg-slate-200 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
+                </a>
+                <a href="#contact" class="px-8 py-4 bg-transparent border border-slate-700 text-white font-semibold rounded-lg hover:border-slate-500 hover:bg-white/5 transition-all">
+                    Contact Me
+                </a>
+            </div>
+
+            <!-- Stats/Socials -->
+            <div class="mt-20 flex gap-8 text-slate-500">
+                <a href="https://github.com/saarvesh0606" target="_blank" class="hover:text-indigo-400 transition-colors"><i class="fab fa-github text-2xl"></i></a>
+                <a href="https://www.linkedin.com/in/sarvesh-jagtap-9122272a7" target="_blank" class="hover:text-indigo-400 transition-colors"><i class="fab fa-linkedin text-2xl"></i></a>
+                <a href="mailto:saarveshjagtap@gmail.com" class="hover:text-indigo-400 transition-colors"><i class="fas fa-envelope text-2xl"></i></a>
+                <a href="https://www.instagram.com/saarvesh_jagtap/profilecard/?igsh=MXBzOGxjbzRraXBqYQ==" target="_blank" class="hover:text-indigo-400 transition-colors"><i class="fab fa-instagram text-2xl"></i></a>
+            </div>
+        </section>
+
+
+        <!-- Infinite Logo Scroll (Tech Stack) -->
+        <section class="py-12 border-y border-white/5 bg-black/20 backdrop-blur-sm mb-32 overflow-hidden">
+            <div class="relative flex overflow-x-hidden group">
+                <div class="animate-infinite-scroll flex whitespace-nowrap gap-16 px-8 text-slate-500 font-heading text-xl font-bold uppercase tracking-wider items-center">
+                    <!-- Skills from Resume -->
+                    <span class="flex items-center gap-2"><i class="fab fa-python text-2xl"></i> Python</span>
+                    <span class="flex items-center gap-2"><i class="fas fa-server text-2xl"></i> Django</span>
+                    <span class="flex items-center gap-2"><i class="fas fa-flask text-2xl"></i> Flask</span>
+                    <span class="flex items-center gap-2"><i class="fas fa-brain text-2xl"></i> TensorFlow</span>
+                    <span class="flex items-center gap-2"><i class="fas fa-database text-2xl"></i> SQL</span>
+                    <span class="flex items-center gap-2"><i class="fab fa-microsoft text-2xl"></i> Azure</span>
+                    <span class="flex items-center gap-2"><i class="fab fa-google text-2xl"></i> Google Cloud</span>
+                    <span class="flex items-center gap-2"><i class="fab fa-react text-2xl"></i> React.js</span>
+                    <span class="flex items-center gap-2"><i class="fab fa-java text-2xl"></i> Java</span>
+                    <span class="flex items-center gap-2"><i class="fas fa-robot text-2xl"></i> Scikit-Learn</span>
+                    <!-- Duplicate for loop -->
+                    <span class="flex items-center gap-2"><i class="fab fa-python text-2xl"></i> Python</span>
+                    <span class="flex items-center gap-2"><i class="fas fa-server text-2xl"></i> Django</span>
+                    <span class="flex items-center gap-2"><i class="fas fa-flask text-2xl"></i> Flask</span>
+                    <span class="flex items-center gap-2"><i class="fas fa-brain text-2xl"></i> TensorFlow</span>
+                    <span class="flex items-center gap-2"><i class="fas fa-database text-2xl"></i> SQL</span>
+                    <span class="flex items-center gap-2"><i class="fab fa-microsoft text-2xl"></i> Azure</span>
+                </div>
+                <!-- Fade Edges -->
+                <div class="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-[#050505] to-transparent z-10"></div>
+                <div class="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-[#050505] to-transparent z-10"></div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section id="services" class="mb-32">
+            <div class="text-center mb-16 section-fade-up">
+                <h2 class="font-heading text-4xl font-bold text-white mb-4">Core Competencies</h2>
+                <p class="text-slate-400 max-w-xl mx-auto">Providing scalable solutions for increased operational efficiency and improved decision making.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Service 1 -->
+                <div class="spotlight-card rounded-2xl p-8 section-fade-up">
+                    <div class="w-12 h-12 bg-indigo-500/10 rounded-lg flex items-center justify-center mb-6 text-indigo-400 border border-indigo-500/20">
+                        <i class="fas fa-server text-xl"></i>
+                    </div>
+                    <h3 class="font-heading text-xl font-bold text-white mb-3">Backend Architecture</h3>
+                    <p class="text-slate-400 leading-relaxed text-sm">
+                        Designing robust REST APIs and backend services using Python, Django, and Flask. Optimized for secure data exchange and high availability.
+                    </p>
+                </div>
+                
+                <!-- Service 2 -->
+                <div class="spotlight-card rounded-2xl p-8 section-fade-up" style="transition-delay: 100ms;">
+                    <div class="w-12 h-12 bg-indigo-500/10 rounded-lg flex items-center justify-center mb-6 text-indigo-400 border border-indigo-500/20">
+                        <i class="fas fa-brain text-xl"></i>
+                    </div>
+                    <h3 class="font-heading text-xl font-bold text-white mb-3">AI & Machine Learning</h3>
+                    <p class="text-slate-400 leading-relaxed text-sm">
+                        Building intelligent systems with TensorFlow, Scikit-Learn, and LLMs (Gemini/FinGPT). Experience in Sentiment Analysis and Automated Reporting.
+                    </p>
+                </div>
+
+                <!-- Service 3 -->
+                <div class="spotlight-card rounded-2xl p-8 section-fade-up" style="transition-delay: 200ms;">
+                    <div class="w-12 h-12 bg-indigo-500/10 rounded-lg flex items-center justify-center mb-6 text-indigo-400 border border-indigo-500/20">
+                        <i class="fas fa-cloud text-xl"></i>
+                    </div>
+                    <h3 class="font-heading text-xl font-bold text-white mb-3">Cloud & Database</h3>
+                    <p class="text-slate-400 leading-relaxed text-sm">
+                        Deploying scalable applications on Azure and Google Cloud. Designing efficient SQL/MongoDB schemas to reduce data retrieval time.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bento Grid: Projects -->
+        <section id="projects" class="mb-32">
+            <div class="flex items-end justify-between mb-12 section-fade-up">
+                <div>
+                    <h2 class="font-heading text-4xl font-bold text-white mb-2">Featured Projects</h2>
+                    <p class="text-slate-400">Highlights from my recent development work.</p>
+                </div>
+                <a href="https://github.com/saarvesh0606" target="_blank" class="hidden md:inline-flex items-center gap-2 text-indigo-400 hover:text-indigo-300 font-medium transition-colors">
+                    View GitHub <i class="fas fa-arrow-right text-sm"></i>
+                </a>
+            </div>
+
+            <!-- Grid Layout -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[300px]">
+                
+                <!-- About Card (Large) -->
+                <div class="spotlight-card md:col-span-2 row-span-1 rounded-2xl p-8 flex flex-col justify-between section-fade-up group">
+                    <div class="relative z-10">
+                        <div class="w-12 h-12 bg-indigo-500/20 rounded-lg flex items-center justify-center mb-6 text-indigo-400">
+                            <i class="fas fa-user-check text-xl"></i>
+                        </div>
+                        <h3 class="font-heading text-2xl font-bold text-white mb-3">Solution-Oriented Developer</h3>
+                        <p class="text-slate-400 leading-relaxed max-w-lg">
+                            Recognized for solution-oriented thinking and collaboration skills. I specialize in identifying bottlenecks and providing scalable solutions to increase operational efficiency. My goal is to build technology that makes a tangible impact.
+                        </p>
+                    </div>
+                    <div class="absolute right-0 bottom-0 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <i class="fas fa-laptop-code text-9xl transform translate-x-10 translate-y-10"></i>
+                    </div>
+                </div>
+
+                <!-- Project 1 (Small) -->
+                <a href="https://github.com/saarvesh0606/Qunatara-AI-finiance-assistant"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="block">
+                    <div class="spotlight-card rounded-2xl p-6 flex flex-col justify-end relative group overflow-hidden section-fade-up" style="transition-delay: 100ms;">
+                        <div class="absolute inset-0 bg-[url('https://placehold.co/1e1b4b/38BDF8')] bg-cover bg-center transition-transform duration-500 group-hover:scale-110 opacity-40 group-hover:opacity-20"></div>
+                        <div class="relative z-10">
+                            <div class="mb-2 inline-flex px-2 py-1 bg-indigo-500/20 text-indigo-300 text-xs rounded border border-indigo-500/20">Pyhton + Flask + Gemini API</div>
+                            <h3 class="font-heading text-xl font-bold text-white mb-1">Quantara AI</h3>
+                            <p class="text-sm text-slate-400">
+                                QuanTara is a full-stack AI-powered financial intelligence dashboard that provides enterprise-grade analysis for corporate documents, stock markets, industry research, and real-time financial news using modern AI and data APIs.
+                                It is designed as a smart decision-support system for analysts, students, investors, and founders to extract deep insights from raw financial data with a professional web interface.
+                            </p>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Project 2 (Small) -->
+                <a href="https://github.com/saarvesh0606/real-time-gesture-recognition"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="block">
+                    <div class="spotlight-card rounded-2xl p-6 flex flex-col justify-end relative group overflow-hidden section-fade-up"
+                         style="transition-delay: 200ms; cursor: pointer;">
+                        <div class="relative z-10">
+                            <div class="mb-2 inline-flex px-2 py-1 bg-emerald-500/20 text-emerald-300 text-xs rounded border border-emerald-500/20">
+                                Python + HTML
+                            </div>
+                            <h3 class="font-heading text-xl font-bold text-white mb-1">
+                                Real Time Gesture Recognition
+                            </h3>
+                            <p class="text-sm text-slate-400">
+                                Accomplished through hand gesture recognition, using MediaPipe and OpenCV
+                                and running on Flask. The webcam captures the image of the player’s hands,
+                                recognizes the hands by measuring the location of the fingers.
+                            </p>
+                        </div>
+                    </div>
+                </a>
+                
+                <!-- Project 3 (Large Wide) -->
+                <a href="https://github.com/saarvesh0606/infosys_project_final"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="block md:col-span-2">
+                    <div class="spotlight-card rounded-2xl p-8 flex flex-row items-center relative overflow-hidden section-fade-up"
+                         style="transition-delay: 300ms; cursor: pointer;">
+                        <div class="relative z-10 w-full md:w-3/4">
+                            <div class="mb-4 inline-flex px-3 py-1 bg-pink-500/20 text-pink-300 text-xs rounded-full border border-pink-500/20 font-bold tracking-wide">
+                                FEATURED PROJECT
+                            </div>
+
+                            <h3 class="font-heading text-3xl font-bold text-white mb-3">
+                                CareConnect
+                            </h3>
+
+                            <p class="text-slate-400 mb-6">
+                                A comprehensive hospital management system utilizing Azure Speech-to-Text and AI
+                                to monitor patient health. Features include automated nurse alerts, patient workflow
+                                management, and intuitive admin dashboards.
+                            </p>
+
+                            <div class="flex gap-2 mb-4">
+                                <span class="text-xs bg-white/10 px-2 py-1 rounded text-slate-300">Python</span>
+                                <span class="text-xs bg-white/10 px-2 py-1 rounded text-slate-300">AI/ML</span>
+                                <span class="text-xs bg-white/10 px-2 py-1 rounded text-slate-300">MongoDB</span>
+                                <span class="text-xs bg-white/10 px-2 py-1 rounded text-slate-300">Azure Speech Services</span>
+                            </div>
+
+                            <div class="inline-flex items-center text-white font-semibold border-b border-indigo-500 pb-1">
+                                View Case Study <i class="fas fa-arrow-right ml-2 text-xs"></i>
+                            </div>
+                        </div>
+
+                        <!-- Decorative Graphic -->
+                        <div class="absolute right-0 top-0 bottom-0 w-1/3 bg-gradient-to-l from-indigo-900/40 to-transparent hidden md:block"></div>
+
+                        <div class="absolute right-[-20px] top-1/2 -translate-y-1/2 text-[10rem] text-white/5 pointer-events-none">
+                            <i class="fas fa-heartbeat"></i>
+                        </div>
+                    </div>
+                </a>
+
+        </section>
+
+        <!-- Experience -->
+        <section id="experience" class="mb-32 max-w-3xl mx-auto">
+            <h2 class="font-heading text-4xl font-bold text-white mb-12 text-center section-fade-up">Experience</h2>
+            
+            <div class="relative border-l border-white/10 ml-6 space-y-12">
+                
+                <!-- Role 1 -->
+                <div class="relative pl-10 section-fade-up">
+                    <div class="absolute -left-[5px] top-2 w-2.5 h-2.5 bg-indigo-500 rounded-full shadow-[0_0_10px_rgba(99,102,241,0.6)]"></div>
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-2">
+                        <h3 class="text-xl font-bold text-white">Intern</h3>
+                        <span class="text-sm font-mono text-slate-500">Nov 2024 — Mar 2025</span>
+                    </div>
+                    <div class="text-indigo-400 font-medium mb-4">Infosys, Pune</div>
+                    <ul class="list-disc list-outside ml-4 text-slate-400 leading-relaxed space-y-2">
+                        <li>Developing a Multi-Functional application for multi-Specialist hospitals to streamline communication between staff and patients.</li>
+                        <li>Providing strategic leadership in designing UI/UX and developing the complete backend architecture.</li>
+                        <li>Coordinating with AI/ML & Frontend teams for seamless testing and integration.</li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Education & Certifications (NEW) -->
+        <section id="education" class="mb-32">
+            <h2 class="font-heading text-4xl font-bold text-white mb-12 text-center section-fade-up">Education & Certifications</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Education Column -->
+                <div class="space-y-6">
+                    <h3 class="text-2xl font-bold text-white border-b border-white/10 pb-4 mb-6">Education</h3>
+                    
+                    <div class="spotlight-card rounded-xl p-6 section-fade-up">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="text-lg font-bold text-white">B.E. in Computer Engineering</h4>
+                            <span class="text-xs bg-indigo-500/20 text-indigo-300 px-2 py-1 rounded">2023 - 2027</span>
+                        </div>
+                        <p class="text-indigo-400 text-sm mb-2">NBN Sinhgad Technical Institute Campus, Pune</p>
+                        <p class="text-slate-400 text-sm">CGPA: 7.89</p>
+                    </div>
+
+                    <div class="spotlight-card rounded-xl p-6 section-fade-up">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="text-lg font-bold text-white">Senior Secondary (12th Grade)</h4>
+                            <span class="text-xs bg-white/10 text-slate-400 px-2 py-1 rounded">2021 - 2023</span>
+                        </div>
+                        <p class="text-indigo-400 text-sm mb-2">Sinhgad College of Science, Pune</p>
+                        <p class="text-slate-400 text-sm">Stream: PCM with Computer Science</p>
+                    </div>
+                </div>
+
+                <!-- Certifications Column -->
+                <div class="space-y-6">
+                    <h3 class="text-2xl font-bold text-white border-b border-white/10 pb-4 mb-6">Certifications</h3>
+                    
+                    <div class="spotlight-card rounded-xl p-6 section-fade-up">
+                        <ul class="space-y-4">
+
+                            <li class="flex items-start gap-3">
+                                <i class="fas fa-certificate text-indigo-400 mt-1"></i>
+                                <div>
+                                    <a href="https://www.coursera.org/account/accomplishments/verify/WQTBP5U5YWQC"
+                                       target="_blank"
+                                       rel="noopener noreferrer"
+                                       class="block hover:text-indigo-400 transition-colors">
+                                        <h5 class="text-white font-semibold text-sm">
+                                            Supervised Machine Learning: Regression and Classification
+                                        </h5>
+                                    </a>
+                                    <p class="text-slate-500 text-xs">Stanford Online & DeepLearning.AI</p>
+                                </div>
+                            </li>
+
+                            <li class="flex items-start gap-3">
+                                <i class="fas fa-certificate text-indigo-400 mt-1"></i>
+                                <div>
+                                    <a href="https://www.coursera.org/account/accomplishments/verify/G2COUCZRJ72Z"
+                                       target="_blank"
+                                       rel="noopener noreferrer"
+                                       class="block hover:text-indigo-400 transition-colors">
+                                        <h5 class="text-white font-semibold text-sm">
+                                            Unsupervised Learning, Recommenders, Reinforcement Learning
+                                        </h5>
+                                    </a>
+                                    <p class="text-slate-500 text-xs">Stanford Online & DeepLearning.AI</p>
+                                </div>
+                            </li>
+
+                            <li class="flex items-start gap-3">
+                                <i class="fas fa-certificate text-indigo-400 mt-1"></i>
+                                <div>
+                                    <a href="https://www.coursera.org/account/accomplishments/verify/E4869DO0I62K"
+                                       target="_blank"
+                                       rel="noopener noreferrer"
+                                       class="block hover:text-indigo-400 transition-colors">
+                                        <h5 class="text-white font-semibold text-sm">
+                                            Advanced Learning Algorithms
+                                        </h5>
+                                    </a>
+                                    <p class="text-slate-500 text-xs">Stanford Online & DeepLearning.AI</p>
+                                </div>
+                            </li>
+
+                            <li class="flex items-start gap-3">
+                                <i class="fas fa-certificate text-indigo-400 mt-1"></i>
+                                <div>
+                                    <a href="https://www.coursera.org/account/accomplishments/specialization/GK52UWW8DXYP"
+                                       target="_blank"
+                                       rel="noopener noreferrer"
+                                       class="block hover:text-indigo-400 transition-colors">
+                                        <h5 class="text-white font-semibold text-sm">
+                                            Machine Learning Specialization
+                                        </h5>
+                                    </a>
+                                    <p class="text-slate-500 text-xs">Stanford Online & DeepLearning.AI</p>
+                                </div>
+                             </li>
+
+                            <li class="flex items-start gap-3">
+                                <i class="fas fa-certificate text-indigo-400 mt-1"></i>
+                                <div>
+                                    <a href="https://www.udemy.com/certificate/UC-8e7a2227-464d-44d0-addd-b46ea0fef8cf/"
+                                       target="_blank"
+                                       rel="noopener noreferrer"
+                                       class="block hover:text-indigo-400 transition-colors">
+                                        <h5 class="text-white font-semibold text-sm">
+                                            100 Days of Code: The Complete Python Pro Bootcamp
+                                        </h5>
+                                    </a>
+                                    <p class="text-slate-500 text-xs">Udemy Professional Course</p>
+                                </div>  
+                            </li>
+
+                            <li class="flex items-start gap-3">
+                                <i class="fas fa-certificate text-indigo-400 mt-1"></i>
+                                <div>
+                                    <a href="https://www.skills.google/public_profiles/ebd94d34-13de-4c6a-91c3-63d8dfcc9c25/badges/9998835?utm_medium=social&utm_source=linkedin&utm_campaign=ql-social-share"
+                                       target="_blank"
+                                       rel="noopener noreferrer"
+                                       class="block hover:text-indigo-400 transition-colors">
+                                        <h5 class="text-white font-semibold text-sm">
+                                            Use Machine Learning APIs on Google Cloud
+                                        </h5>
+                                    </a>
+                                    <p class="text-slate-500 text-xs">Google</p>
+                                </div>        
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+
+
+                <!-- Resume Column -->
+                <div class="space-y-6">
+                    <h3 class="text-2xl font-bold text-white border-b border-white/10 pb-4 mb-6">Resume</h3>
+                    
+                    <div class="spotlight-card rounded-xl p-6 section-fade-up">
+                        <div class="flex items-start justify-between mb-4">
+                            <div>
+                                <h4 class="text-lg font-bold text-white">Download My Resume</h4>
+                                <p class="text-slate-400 text-sm mt-1">
+                                    Get a complete overview of my skills, experience, and projects in a single document.
+                                </p>
+                            </div>
+                            <i class="fas fa-file-pdf text-2xl text-indigo-400"></i>
+                        </div>
+
+                        <a href="https://drive.google.com/file/d/1mfNzbAoX2Ta43ZYc7CY_UlEJrxiBH015/view?usp=sharing"
+                           target="_blank"
+                           rel="noopener noreferrer"
+                           class="w-full inline-flex items-center justify-center px-4 py-2 rounded-lg border border-white/10 hover:border-indigo-400 text-slate-200 text-xs font-medium transition-all">
+                            <i class="fas fa-external-link-alt mr-2 text-xs"></i>
+                            View & Download Resume.
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Contact / Footer -->
+        <section id="contact" class="text-center py-20 border-t border-white/5 section-fade-up">
+            <h2 class="font-heading text-5xl md:text-6xl font-bold text-white mb-6">Let's work together.</h2>
+            <p class="text-slate-400 text-lg mb-10">Available for internships and freelance projects.</p>
+            
+            <a href="mailto:saarveshjagtap@gmail.com" class="inline-block px-10 py-5 bg-white text-black font-bold text-lg rounded-full hover:scale-105 hover:shadow-[0_0_40px_rgba(255,255,255,0.3)] transition-all duration-300">
+                Get in Touch
+            </a>
+            
+            <div class="flex justify-center gap-6 mt-10 text-sm text-slate-500">
+                <span class="flex items-center gap-2"><i class="fas fa-phone"></i> +91 7774943458</span>
+                <span class="flex items-center gap-2"><i class="fas fa-map-marker-alt"></i> Pune, India</span>
+            </div>
+
+            <div class="mt-20 text-slate-600 text-sm">
+                <p>&copy; Saarvesh Jagtap. All Rights Reserved.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ===== HACKER EASTER EGG OVERLAY ===== -->
+    <div id="hackerOverlay" class="fixed inset-0 z-[9998] hidden items-center justify-center bg-black/90 backdrop-blur-sm">
+
+      <!-- Matrix-like background -->
+      <div class="absolute inset-0 opacity-30 pointer-events-none hacker-matrix-bg"></div>
+
+      <!-- Terminal Window -->
+      <div id="hackerTerminal" class="relative bg-black border border-emerald-500/50 rounded-xl max-w-2xl w-[90%] shadow-[0_0_40px_rgba(16,185,129,0.8)] overflow-hidden">
+
+        <!-- Terminal Header -->
+        <div class="flex items-center justify-between px-4 py-2 bg-zinc-900 border-b border-emerald-500/40 text-xs font-mono text-emerald-300">
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-red-500"></span>
+            <span class="w-2.5 h-2.5 rounded-full bg-yellow-400"></span>
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+            <span class="ml-3">sarvesh@localhost: ~/portfolio</span>
+          </div>
+          <button id="closeHacker" class="text-zinc-500 hover:text-red-400 transition-colors" type="button">
+            [ ESC ]
+          </button>
+        </div>
+
+        <!-- Terminal Body -->
+        <div class="p-4 font-mono text-[13px] leading-relaxed text-emerald-300 max-h-[60vh] overflow-y-auto bg-gradient-to-b from-black via-black to-emerald-950/40">
+          <div id="hackerOutput"></div>
+          <div class="mt-1 text-emerald-400">
+            <span class="text-emerald-300">&gt;</span>
+            <span id="hackerPrompt">_</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <script>
+    // --- SPOTLIGHT EFFECT ---
+    const cards = document.querySelectorAll('.spotlight-card');
+    
+    cards.forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            card.style.setProperty('--mouse-x', `${x}px`);
+            card.style.setProperty('--mouse-y', `${y}px`);
+        });
+    });
+
+    // --- SCROLL ANIMATIONS ---
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: "0px 0px -50px 0px"
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.section-fade-up').forEach(el => {
+        observer.observe(el);
+    });
+
+    // --- CUSTOM CURSOR (desktop only | hollow ring | NO magnet, just smooth) ---
+    if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+        const cursor = document.getElementById("custom-cursor");
+
+        // Base movement: always follow mouse 1:1
+        document.addEventListener("mousemove", e => {
+            cursor.style.left = e.clientX + "px";
+            cursor.style.top = e.clientY + "px";
+        });
+
+        // Reset when mouse leaves window
+        document.addEventListener("mouseleave", () => {
+            resetCursor();
+        });
+
+        // Links & buttons (except those wrapping spotlight cards) -> yellow hollow ring
+        const linkTargets = Array.from(document.querySelectorAll("a, button"))
+            .filter(el => !el.querySelector(".spotlight-card"));
+
+        linkTargets.forEach(el => {
+            el.addEventListener("mouseenter", () => {
+                cursor.style.width = "26px";
+                cursor.style.height = "26px";
+                cursor.style.background = "transparent";
+                cursor.style.border = "2px solid rgba(251,191,36,0.9)"; // amber
+                cursor.style.boxShadow = "0 0 24px rgba(251,191,36,0.6)";
+            });
+
+            el.addEventListener("mouseleave", () => {
+                resetCursor();
+            });
+        });
+
+        // Spotlight cards -> blue hollow ring
+        const cardTargets = document.querySelectorAll(".spotlight-card");
+
+        cardTargets.forEach(el => {
+            el.addEventListener("mouseenter", () => {
+                cursor.style.width = "32px";
+                cursor.style.height = "32px";
+                cursor.style.background = "transparent";
+                cursor.style.border = "2px solid rgba(129,140,248,0.9)"; // indigo
+                cursor.style.boxShadow = "0 0 28px rgba(129,140,248,0.6)";
+            });
+
+            el.addEventListener("mouseleave", () => {
+                resetCursor();
+            });
+        });
+
+        function resetCursor() {
+            cursor.style.width = "10px";
+            cursor.style.height = "10px";
+            cursor.style.background = "rgba(129,140,248,1)";
+            cursor.style.border = "none";
+            cursor.style.boxShadow = "0 0 10px rgba(129,140,248,0.6)";
+            cursor.style.transform = "translate(0,0)";
+        }
+    }
+
+    // --- HACKER EASTER EGG TERMINAL ---
+    const hackerLogo = document.getElementById("secretLogo");
+    const hackerOverlay = document.getElementById("hackerOverlay");
+    const hackerOutput = document.getElementById("hackerOutput");
+    const hackerClose = document.getElementById("closeHacker");
+
+    let hackerActive = false;
+
+    // Lines that will be "typed" in the terminal
+    const hackerLines = [
+        "[+] Initializing secure shell to portfolio.main()...",
+        "[+] Bypassing boring UI layer...",
+        "[+] Injecting AI/ML modules: Python | Django | TensorFlow...",
+        "[+] Establishing connection to GitHub: saarvesh0606...",
+        "[+] Loading projects: Quantara AI, CareConnect, Gesture Recognition...",
+        "[+] Optimizing backend architecture for low latency & high throughput...",
+        "[+] Deploying on Azure & Google Cloud...",
+        "[OK] Hacker mode activated. You have good taste in clicking logos. :)",
+        "[BY] Saarvesh Jagtap :o"
+    ];
+
+    function openHackerTerminal() {
+        if (!hackerOverlay || !hackerOutput) return;
+
+        hackerActive = true;
+        hackerOutput.innerHTML = "";  // clear previous session
+        hackerOverlay.classList.add("hacker-show");
+
+        // Start typing sequence
+        typeHackerLines(0, 0);
+    }
+
+    function typeHackerLines(lineIndex, charIndex) {
+        if (!hackerActive) return;
+        if (lineIndex >= hackerLines.length) return;
+
+        const line = hackerLines[lineIndex];
+
+        // If starting new line, create an element
+        if (charIndex === 0) {
+            const lineEl = document.createElement("div");
+            lineEl.className = "mb-1";
+            lineEl.setAttribute("data-line-index", lineIndex.toString());
+            lineEl.innerHTML = `<span class="text-emerald-400">&gt;</span> `;
+            hackerOutput.appendChild(lineEl);
+            hackerOutput.scrollTop = hackerOutput.scrollHeight;
+        }
+
+        const currentLineEl = hackerOutput.querySelector(`[data-line-index="${lineIndex}"]`);
+        if (!currentLineEl) return;
+
+        currentLineEl.innerHTML = `<span class="text-emerald-400">&gt;</span> ` + 
+            `<span>${line.slice(0, charIndex + 1)}</span>`;
+
+        hackerOutput.scrollTop = hackerOutput.scrollHeight;
+
+        if (charIndex < line.length - 1) {
+            setTimeout(() => typeHackerLines(lineIndex, charIndex + 1), 20); // typing speed
+        } else {
+            // Move to next line after a short delay
+            setTimeout(() => typeHackerLines(lineIndex + 1, 0), 250);
+        }
+    }
+
+    function closeHackerTerminal() {
+        if (!hackerOverlay) return;
+        hackerActive = false;
+        hackerOverlay.classList.remove("hacker-show");
+    }
+
+    // Click on floating logo triggers hacker mode
+    if (hackerLogo) {
+        hackerLogo.addEventListener("click", (e) => {
+            e.preventDefault();
+            openHackerTerminal();
+        });
+    }
+
+    // Close button
+    if (hackerClose) {
+        hackerClose.addEventListener("click", closeHackerTerminal);
+    }
+
+    // Click outside terminal closes overlay
+    if (hackerOverlay) {
+        hackerOverlay.addEventListener("click", (e) => {
+            if (e.target === hackerOverlay) {
+                closeHackerTerminal();
+            }
+        });
+    }
+
+    // ESC key closes overlay
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+            closeHackerTerminal();
+        }
+    });
+    </script>
+
+
+</body>
+</html>
